@@ -1,0 +1,4 @@
+cron:
+- description: Push a "tick" onto pubsub every 3 hours to end the round
+  url: /publish/round-end
+  schedule: every 3 hours

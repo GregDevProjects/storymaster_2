@@ -1,0 +1,44 @@
+Timer
+Cron job that updates a field firebase in firebase  
+    - https://github.com/FirebaseExtended/functions-cron
+
+
+--------Backlog--------
+As a user, I want to immediately be able to tell how much time is left in a round, so I know how much longer I have to write or how much longer until
+I see the round results
+
+As a user, I want to be able to submit one writing/vote per round, so that I can play a fair game 
+
+As a user, I want to everyone's progress tracked over the span of the story, so that the game can have a winner 
+
+As a user, I want to see the winner/stats of each round, so that I can see how I am doing in comparison to others 
+
+As a user, I want to be able to keep my stats for the story when I exit the app, so that I can play without being connected to the app constantly 
+
+As a user, I want to know how to play the game 
+
+As a user, I want to see a record of the past stories, so I can reminisce 
+
+As a user, I want to be notified when another player submits a writing or vote, so that I can get a sense of community 
+
+As a user, I want to have global leaderboards, so I can strive to win something bigger than a story
+
+As a user, I want to have some stories with a specific theme or unique requirement, so that the game doesn't get stale
+
+As Greg, I want to have some db security, so that I don't get hacked
+/--------Backlog--------
+
+---------DOCS------------
+
+deploy firebase functions
+    from root:
+        - firebase deploy --only functions --project storymaster-2
+    from .\appengine\:
+        - npm run deploy
+
+/--------DOCS------------
+
+Design doc 
+    - what are you building? 
+    - feature requirement? 
+    - what classes/data structures?
