@@ -1,0 +1,26 @@
+{
+    "next_round_start": "",
+    "round_number": "",
+    "users": {
+        "user_id":{
+            "name": "",
+            "password": ""
+        }
+    },
+    "writings": {
+        "writing_id": {
+            "message": "",
+            "story_id": "",
+            "round_number": "",
+            "user_id": ""
+        }
+    },
+    "votes": {
+        "vote_id": {
+            "writing_id": "",
+            "user_id": "",
+            "story_id": "",
+            "round_number": ""
+        }
+    }
+}
