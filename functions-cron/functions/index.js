@@ -16,6 +16,9 @@ const admin = require('firebase-admin');
 const moment = require('moment')
 const serviceAccount = require("./storymaster-2-firebase-adminsdk-0jmbr-067e4d3a9e.json");
 
+const roundsPerStory = 10;
+const roundLengthHours = 3;
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://storymaster-2.firebaseio.com"
@@ -23,11 +26,28 @@ admin.initializeApp({
 
 exports.round_end = functions.pubsub
   .topic('round-end')
-  .onPublish((message) => { 
+  .onPublish((message) => {
+    addHoursToNextRoundStart(roundLengthHours);
+    updateRoundNumber();
+    return true;
+  });
+
+  function addHoursToNextRoundStart(hours) {
     const dbTimeReference = admin.database().ref().child('next_round_start');
     const utcTime = moment.utc();
     console.log("Round finished at " + utcTime.valueOf());
-    dbTimeReference.set(utcTime.add(3, 'hours').valueOf());
+    dbTimeReference.set(utcTime.add(hours, 'hours').valueOf());
     console.log("Next Round set to " + utcTime.valueOf());
-    return true;
-  });
+  }
+
+function updateRoundNumber() {
+    const dbRoundNumberReference = admin.database().ref().child('round_number');
+    dbRoundNumberReference.once("value", function(snapshot) {
+        const currentRound = snapshot.val();
+        if (currentRound >= roundsPerStory) {
+            dbRoundNumberReference.set(1);
+            return;
+        }
+        dbRoundNumberReference.set(currentRound + 1);
+    });
+}

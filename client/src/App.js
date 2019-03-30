@@ -9,22 +9,26 @@ class App extends Component {
     constructor() {
         super();
         this.state = {
-            roundTimeLeft: ''
+            roundTimeLeft: '',
+            roundNumber: ''
         }
     }
 
     componentDidMount() {
         const timeRef = firebase.database().ref().child('next_round_start');
+        const roundNumberRef = firebase.database().ref().child('round_number');
         timeRef.on('value', snap => 
             this.setState({roundTimeLeft : snap.val()})
         );
-
+        roundNumberRef.on('value', snap => 
+            this.setState({roundNumber: snap.val()})
+        );
     }
 
     render() {
         return (
             <div className="App">
-                <h1>{this.state.roundTimeLeft}</h1>
+                <h1>{this.state.roundNumber}</h1>
                 <CountdownTimer date={moment(this.state.roundTimeLeft).toDate()}></CountdownTimer>
             </div>
             
