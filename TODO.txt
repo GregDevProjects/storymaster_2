@@ -36,6 +36,13 @@ deploy firebase functions
 
 /--------DOCS------------
 
+---------RESEARCH------------
+ 
+material design timers
+https://codepen.io/janoschvg/pen/QwmdwY
+
+/---------RESEARCH-----------
+
 Design doc 
     - what are you building? 
     - feature requirement? 

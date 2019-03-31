@@ -1,23 +1,31 @@
 // eslint-disable-next-line no-unused-vars
 import React, { Component } from 'react'
+import { PropTypes } from 'prop-types'
+import LinearProgress from '@material-ui/core/LinearProgress'
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 export class CountdownTimer extends Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      days: 0,
-      hours: 0,
-      min: 0,
-      sec: 0
+      timeLeft:
+        { days: 0,
+          hours: 0,
+          min: 0,
+          sec: 0
+        },
+      totalSecondsLeft: 0
     }
   }
 
   componentDidMount () {
     // update every second
     this.interval = setInterval(() => {
-      const date = this.calculateCountdown(this.props.date)
-      date ? this.setState(date) : this.stop()
+      const timeLeft = this.calculateCountdown(this.props.date)
+
+      const date = timeLeft.timeLeft
+      date ? this.setState({ timeLeft: date, totalSecondsLeft: timeLeft.totalSecondsLeft }) : this.stop()
     }, 1000)
   }
 
@@ -27,6 +35,8 @@ export class CountdownTimer extends Component {
 
   calculateCountdown (endDate) {
     let diff = (Date.parse(new Date(endDate)) - Date.parse(new Date())) / 1000
+
+    const totalSecondsLeft = diff
 
     // clear countdown when date is reached
     if (diff <= 0) return false
@@ -59,7 +69,7 @@ export class CountdownTimer extends Component {
     }
     timeLeft.sec = diff
 
-    return timeLeft
+    return { timeLeft: timeLeft, totalSecondsLeft: totalSecondsLeft }
   }
 
   stop () {
@@ -75,42 +85,21 @@ export class CountdownTimer extends Component {
   }
 
   render () {
-    const countDown = this.state
+    const countDown = this.state.timeLeft
 
     return (
-      <div className="Countdown">
-        <span className="Countdown-col">
-          <span className="Countdown-col-element">
-            <strong>{this.addLeadingZeros(countDown.days)}</strong>
-            <span>{countDown.days === 1 ? 'Day' : 'Days'}</span>
-          </span>
-        </span>
+      <React.Fragment>
+        <div>
+          <strong>{this.addLeadingZeros(countDown.hours)} : {this.addLeadingZeros(countDown.min)} : {this.addLeadingZeros(countDown.sec)}</strong>
+          {/* <LinearProgress variant="determinate" value={(this.state.totalSecondsLeft / 10800) * 100}></LinearProgress> */}
+          {/* <CircularProgress variant="determinate" value={(this.state.totalSecondsLeft / 10800) * 100}>></CircularProgress> */}
+        </div>
 
-        <span className="Countdown-col">
-          <span className="Countdown-col-element">
-            <strong>{this.addLeadingZeros(countDown.hours)}</strong>
-            <span>Hours</span>
-          </span>
-        </span>
-
-        <span className="Countdown-col">
-          <span className="Countdown-col-element">
-            <strong>{this.addLeadingZeros(countDown.min)}</strong>
-            <span>Min</span>
-          </span>
-        </span>
-
-        <span className="Countdown-col">
-          <span className="Countdown-col-element">
-            <strong>{this.addLeadingZeros(countDown.sec)}</strong>
-            <span>Sec</span>
-          </span>
-        </span>
-      </div>
+      </React.Fragment>
     )
   }
 }
 
-CountdownTimer.defaultProps = {
-  date: new Date()
+CountdownTimer.propTypes = {
+  date: PropTypes.instanceOf(Date).isRequired
 }
