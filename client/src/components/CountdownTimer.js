@@ -1,8 +1,9 @@
 // eslint-disable-next-line no-unused-vars
 import React, { Component } from 'react'
 import { PropTypes } from 'prop-types'
-import LinearProgress from '@material-ui/core/LinearProgress'
-import CircularProgress from '@material-ui/core/CircularProgress'
+import { MuiThemeProvider } from '@material-ui/core/styles'
+import theme from '../theme'
+import { Typography } from '@material-ui/core'
 
 export class CountdownTimer extends Component {
   constructor (props) {
@@ -88,14 +89,13 @@ export class CountdownTimer extends Component {
     const countDown = this.state.timeLeft
 
     return (
-      <React.Fragment>
-        <div>
-          <strong>{this.addLeadingZeros(countDown.hours)} : {this.addLeadingZeros(countDown.min)} : {this.addLeadingZeros(countDown.sec)}</strong>
-          {/* <LinearProgress variant="determinate" value={(this.state.totalSecondsLeft / 10800) * 100}></LinearProgress> */}
-          {/* <CircularProgress variant="determinate" value={(this.state.totalSecondsLeft / 10800) * 100}>></CircularProgress> */}
-        </div>
+      <MuiThemeProvider theme={theme}>
 
-      </React.Fragment>
+        <Typography>
+          {this.addLeadingZeros(countDown.hours)} : {this.addLeadingZeros(countDown.min)} : {this.addLeadingZeros(countDown.sec)}
+        </Typography>
+
+      </MuiThemeProvider>
     )
   }
 }
