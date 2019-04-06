@@ -8,8 +8,27 @@ export default createMuiTheme({
         backgroundColor: 'black'
       }
 
+    },
+    MuiInputBase: {
+      root: {
+        color: 'grey'
+      }
+    },
+    MuiPrivateNotchedOutline: {
+      root: {
+        borderColor: 'white !important'
+      }
+    },
+    MuiFormLabel: {
+      root: {
+        '&$focused': {
+          color: 'white !important'
+        }
+
+      }
     }
   },
+
   palette: {
     background: {
       default: 'black'
@@ -24,4 +43,5 @@ export default createMuiTheme({
       color: 'white'
     }
   }
+
 })
