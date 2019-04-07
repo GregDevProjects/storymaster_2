@@ -24,6 +24,7 @@ export default class Home extends Component {
       roundNumber: '',
       action: ACTIONS.menu
     }
+    this.userId = 123456
   }
 
   componentDidMount () {
@@ -48,6 +49,22 @@ export default class Home extends Component {
   onBackClick () {
     this.setState({ action: ACTIONS.menu })
   }
+
+  onWritingSubmit (message) {
+    const dbRefWritings = firebase.database().ref().child('writings')
+    const dbRefStoryCurrent = firebase.database().ref().child('story_current')
+    dbRefStoryCurrent.once('value', snap => {
+      const values = snap.val()
+      dbRefWritings.push().set({
+        message: message,
+        round_number: values.round_number,
+        user_id: this.userId,
+        story_id: values.id
+      })
+    }
+    )
+  }
+
   actionArea () {
     if (this.state.action === ACTIONS.menu) {
       return (
@@ -58,7 +75,10 @@ export default class Home extends Component {
       )
     } else if (this.state.action === ACTIONS.writing) {
       return (
-        <Write onBackClick={ this.onBackClick.bind(this) }></Write>
+        <Write
+          onWritingSubmit={this.onWritingSubmit.bind(this)}
+          onBackClick={ this.onBackClick.bind(this) }>
+        </Write>
       )
     }
   }
