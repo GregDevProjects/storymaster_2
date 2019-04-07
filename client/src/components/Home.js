@@ -27,14 +27,14 @@ export default class Home extends Component {
   }
 
   componentDidMount () {
-    const timeRef = firebase.database().ref().child('next_round_start')
-    const roundNumberRef = firebase.database().ref().child('round_number')
-    timeRef.on('value', snap =>
-      this.setState({ roundTimeLeft: snap.val() })
-    )
-    roundNumberRef.on('value', snap =>
-      this.setState({ roundNumber: snap.val() })
-    )
+    const storyRef = firebase.database().ref().child('story_current')
+    storyRef.on('value', snap => {
+      const value = snap.val()
+      this.setState({
+        roundTimeLeft: value.next_round_start,
+        roundNumber: value.round_number
+      })
+    })
   }
 
   onWriteClick () {

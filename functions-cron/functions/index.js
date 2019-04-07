@@ -27,27 +27,38 @@ admin.initializeApp({
 exports.round_end = functions.pubsub
   .topic('round-end')
   .onPublish((message) => {
-    addHoursToNextRoundStart(roundLengthHours);
-    updateRoundNumber();
-    return true;
+    const dbStoryReference = admin.database().ref().child('story_current');
+    dbStoryReference.once('value', snap =>{
+      const oldStoryValue = snap.val();
+      const newStoryValue = {};
+      newStoryValue.next_round_start = addHoursToNextRoundStart(roundLengthHours);
+      newStoryValue.round_number = updateRoundNumber(oldStoryValue.round_number);
+      newStoryValue.id = updateId(oldStoryValue.round_number, oldStoryValue.id);
+      dbStoryReference.update({
+        ...newStoryValue
+      })
+      return true;
+    })
   });
 
   function addHoursToNextRoundStart(hours) {
-    const dbTimeReference = admin.database().ref().child('next_round_start');
     const utcTime = moment.utc();
     console.log("Round finished at " + utcTime.valueOf());
-    dbTimeReference.set(utcTime.add(hours, 'hours').valueOf());
+    utcTime.add(hours, 'hours');
     console.log("Next Round set to " + utcTime.valueOf());
+    return utcTime.valueOf()
   }
 
-function updateRoundNumber() {
-    const dbRoundNumberReference = admin.database().ref().child('round_number');
-    dbRoundNumberReference.once("value", function(snapshot) {
-        const currentRound = snapshot.val();
-        if (currentRound >= roundsPerStory) {
-            dbRoundNumberReference.set(1);
-            return;
-        }
-        dbRoundNumberReference.set(currentRound + 1);
-    });
-}
+  function updateRoundNumber(oldRoundNumber) {
+    if (oldRoundNumber >= roundsPerStory) {
+        return 1;
+    }
+    return oldRoundNumber + 1;
+  }
+
+  function updateId(oldRoundNumber, oldId) {
+    if (oldRoundNumber >= roundsPerStory) {
+      return moment.utc().valueOf();
+    }
+    return oldId;
+  }

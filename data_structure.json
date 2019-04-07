@@ -1,6 +1,10 @@
 {
-    "next_round_start": "",
-    "round_number": "",
+
+    "story_current": {
+        "next_round_start": "",
+        "round_number": "",
+        "story_id": 123
+    },
     "users": {
         "user_id":{
             "name": "",
