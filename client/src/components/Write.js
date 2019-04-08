@@ -13,7 +13,6 @@ export default class Write extends Component {
   }
 
   onSubmit () {
-    debugger
     this.props.onWritingSubmit(this.state.message)
   }
   render () {

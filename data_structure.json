@@ -5,6 +5,9 @@
         "round_number": "",
         "story_id": 123
     },
+    "has_written":{
+        "user_id": true
+    },
     "users": {
         "user_id":{
             "name": "",

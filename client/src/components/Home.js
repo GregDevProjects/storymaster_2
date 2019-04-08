@@ -22,19 +22,28 @@ export default class Home extends Component {
     this.state = {
       roundTimeLeft: '',
       roundNumber: '',
-      action: ACTIONS.menu
+      action: ACTIONS.menu,
+      hasWritten: false
     }
     this.userId = 123456
   }
 
   componentDidMount () {
     const storyRef = firebase.database().ref().child('story_current')
+
     storyRef.on('value', snap => {
       const value = snap.val()
       this.setState({
         roundTimeLeft: value.next_round_start,
         roundNumber: value.round_number
       })
+    })
+
+    const hasWrittenRef = firebase.database().ref().child('has_written').child(this.userId)
+
+    hasWrittenRef.on('value', snap => {
+      const hasUserWritten = !!snap.val()
+      this.setState({ hasWritten: hasUserWritten })
     })
   }
 
@@ -63,14 +72,19 @@ export default class Home extends Component {
       })
     }
     )
+    const hasWritten = firebase.database().ref().child('has_written')
+    hasWritten.update({
+      [this.userId]: true
+    })
+    this.onBackClick()
   }
 
   actionArea () {
     if (this.state.action === ACTIONS.menu) {
       return (
         <React.Fragment>
-          {HalfWidthButton('Write', 'edit', this.onWriteClick.bind(this))}
-          {HalfWidthButton('Vote', 'how_to_vote', this.onVoteClick)}
+          {HalfWidthButton('Write', 'edit', this.onWriteClick.bind(this), this.state.hasWritten)}
+          {HalfWidthButton('Vote', 'how_to_vote', this.onVoteClick, false)}
         </React.Fragment>
       )
     } else if (this.state.action === ACTIONS.writing) {

@@ -39,7 +39,16 @@ exports.round_end = functions.pubsub
       })
       return true;
     })
+    resetHasWritten()
+
+    //TODO: return promise
+    return true;
   });
+
+  function resetHasWritten() {
+    const allUsers = admin.database().ref().child('has_written')
+    allUsers.set({'user_id':true})
+  }
 
   function addHoursToNextRoundStart(hours) {
     const utcTime = moment.utc();
